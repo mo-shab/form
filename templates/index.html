@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JLPT Registration Form</title>
+    <link rel="stylesheet" href="static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>JLPT Registration Form</h2>
+        <form action="/submit" method="post">
+            <label for="jlpt_level">1 - JLPT Level:</label><br><br>
+            <select id="jlpt_level" name="jlpt_level">
+                <option value="5">N5</option>
+                <option value="4">N4</option>
+                <option value="3">N3</option>
+                <option value="2">N2</option>
+                <option value="1">N1</option>
+            </select><br><br>
+
+            <label for="test_center">2 - Test Site:</label><br><br>
+            <select id="test_center" name="test_center">
+                <option value="Rabat">Rabat</option>
+            </select><br><br>
+
+            <label for="full_name">3 - Given Name:</label><br><br>
+            <input type="text" id="full_name" name="full_name" required><br><br>
+
+            <label for="gender">4 - Gender:</label><br><br>
+            <select id="gender" name="gender">
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+            </select><br><br>
+            
+            <label>5 - Date of Birth:</label><br><br>
+            <div class="input-group">
+                <input type="number" id="dob_year" name="dob_year" placeholder="YYYY" min="1900" max="2024" required>
+                <input type="number" id="dob_month" name="dob_month" placeholder="MM" min="1" max="12" required>
+                <input type="number" id="dob_day" name="dob_day" placeholder="DD" min="1" max="31" required>
+            </div><br>
+
+            <label for="pass_code">6 - 8-Digit Pass Code:</label><br><br>
+            <input type="text" id="pass_code" name="pass_code" pattern="\d{8}" title="Please enter 8 digits." required><br><br>
+            
+
+            <label for="native_language">7-1 - Native Language:</label><br><br>
+            <select id="native_language" name="native_language">
+                <option value="701">Arabic</option>
+                <option value="606">Berber</option>
+                <option value="408">English</option>
+                <option value="411">French</option>
+                <option value="430">Spanish</option>
+                <option value="000">Other</option>
+            </select><br><br>
+
+            <label for="nationality">7-2 - Nationality:</label><br><br>
+            <input type="text" id="nationality" name="nationality" required><br><br>
+
+            <label for="adress">8-1 - Address:</label><br><br>
+            <input type="text" id="adress" name="adress" required><br><br>
+
+
+            <label for="country">8-2 - Country:</label><br><br>
+            <select id="countrySelect" name="country">
+                <option value="Morocco">Morocco</option>
+                <option value="other">Others</option>
+            </select><br><br>
+            <input type="text" id="otherCountry" name="otherCountry" style="display:none;">
+
+            <script>
+                document.getElementById("countrySelect").addEventListener("change", function() {
+                    var selectBox = document.getElementById("countrySelect");
+                    var userInput = document.getElementById("otherCountry");
+            
+                    if (selectBox.value === "other") {
+                        userInput.style.display = "inline-block";
+                        userInput.required = true;
+                    } else {
+                        userInput.style.display = "none";
+                        userInput.required = false;
+                    }
+                });
+            </script>
+
+            <lable for="zip_code"><strong>8-3 - Zip Code:</strong></lable><br><br>
+            <input type="text" id="zip_code" name="zip_code" required><br><br>
+
+            <label for="phone_number">8-4 - Phone Number:</label><br><br>
+            <input type="text" id="phone_number" name="phone_number" required><br><br>
+
+            <label for="email">8-5 - Email Adress:</label><br><br>
+            <input type="email" id="email" name="email" required><br><br>
+
+            <label for="institute">9 - Institution where you study/studied Japanese Language:</label>
+            <input type="text" id="institute" name="institute" required><br><br>
+
+            <label for="place_learn_jp">10 - Place of learning Japanese:</label><br><br>
+            <select id="place_learn_jp" name="place_learn_jp">
+                <option value="1">1. Elementary school (primary education)</option>
+                <option value="2">2. Middle school or high school (secondary education)</option>
+                <option value="3">3. University or graduate school (higher education) as a MAJOR</option>
+                <option value="4">4. University or graduate school (higher education) NOT as a major</option>
+                <option value="5">5. Other educational institution/ Autre établissement d'enseignement</option>
+                <option value="6">6. None of the above/ Aucune de ces réponses</option>
+            </select><br><br>
+
+
+            <label for="reason_jlpt">11. Reason for taking this exam:</label><br><br>
+            <select id="reason_jlpt" name="reason_jlpt">
+                <option value="1">1. Necessary for ADMISSION into university or graduate school in my OWN COUNTRY</option>
+                <option value="2">2. Necessary for ADMISSION into university or graduate school in JAPAN</option>
+                <option value="3">3. Necessary for admission or as PROOF OF PROFICIENCY for other educational institution in my OWN COUNTRY</option>
+                <option value="4">4. Necessary for admission or as PROOF OF PROFICIENCY for other educational institution in JAPAN</option>
+                <option value="5">5. Useful for work /attain employment, secure salary increase, or promotion in my OWN COUNTRY</option>
+                <option value="6">6. Useful for work/attain employment, secure salary increase or promotion in JAPAN</option>
+                <option value="7">7. None of the above; to measure my own level of proficiency</option>
+                <option value="8">8. None of the above</option>
+            </select><br><br>
+
+            <label for="occupation">12. Occupation:</label><br><br>
+            <select id="occupation" name="occupation">
+                <option value="1">1. Elementary school student (primary education).</option>
+                <option value="2">2. Middle school or high school student (secondary education).</option>
+                <option value="3">3. University or graduate school student (higher education).</option>
+                <option value="4">4. Student of other educational institution (e.g. foreign language school).</option>
+                <option value="5">5. Employed (company employee, public servant, educator, self-employed, etc.).</option>
+                <option value="6">6. Other.</option>
+            </select><br><br>
+
+            <label for="occupation_details">13. Occupation details:</label><br><br>
+            <select id="occupation_details" name="occupation_details">
+                <option value="1">1. Use Japanese to teach Japanese-language as a TEACHER</option>
+                <option value="2">2. Use Japanese while working as a PUBLIC SERVANT</option>
+                <option value="3">3. Use Japanese while working as a company employee in the MANUFACTURING, CONSTRUCTION, or IT INDUSTRY</option>
+                <option value="4">4. Use Japanese while working as an employee in the SERVICE, TOURISM, or HOSPITALITY INDUSTRIES</option>
+                <option value="5">5. Use Japanese at a job other than 1 through 4 above</option>
+                <option value="6">6. Do not use Japanese while working</option>
+            </select><br><br>
+
+
+            <label for="media_jp">14 - Media via which you come into contact with Japanese Language: (Press Ctr to Select Multiple Answers).</label><br><br>
+            <select id="media_jp" name="media_jp" multiple>
+                <option value="1">1. TV news program and documentaries</option>
+                <option value="2">2. Drama (excluding anime)</option>
+                <option value="3">3. Anime</option>
+                <option value="4">4. Newspapers and magazines (excluding manga)</option>
+                <option value="5">5. Books (excluding textbooks)</option>
+                <option value="6">6. Manga</option>
+                <option value="7">7. Articles on websites</option>
+                <option value="8">8. Other</option>
+                <option value="9">9. Only come into contact with Japanese language inside the class</option>
+            </select><br><br>
+
+
+            <label for="communicate_teacher">15 - How do you usually communicate in Japanese with your TEACHER?: (Press Ctr to Select Multiple Answers).</label><br><br>
+            <select id="communicate_teacher" name="communicate_teacher" multiple>
+                <option value="1">1. Talk with the teacher</option>
+                <option value="2">2. Listen to what the teacher says</option>
+                <option value="3">3. Read what the teacher writes</option>
+                <option value="4">4. Write to the teacher</option>
+            </select><br><br>
+
+            <label for="communicate_friends">16 - How do you usually communicate in Japanese with your FRIENDS?: (Press Ctr to Select Multiple Answers).</label><br><br>
+            <select id="communicate_friends" name="communicate_friends" multiple>
+                <option value="1">1. Talk with friends</option>
+                <option value="2">2. Listen to what friends say</option>
+                <option value="3">3. Read what friends write</option>
+                <option value="4">4. Write to friends</option>
+            </select><br><br>
+
+            <label for="communicate_family">17 - How do you usually communicate in Japanese with your FAMILY?: (Press Ctr to Select Multiple Answers).</label><br><br>
+            <select id="communicate_family" name="communicate_family" multiple>
+                <option value="1">1. Talk with family</option>
+                <option value="2">2. Listen to what family says</option>
+                <option value="3">3. Read what family writes</option>
+                <option value="4">4. Write to family</option>
+            </select><br><br>
+
+            <label for="communicate_supervisor">19 - How do you usually communicate in Japanese with supervisor?: (Press Ctr to Select Multiple Answers).</label><br><br>
+            <select id="communicate_supervisor" name="communicate_supervisor" multiple>
+                <option value="1">1. Talk with the supervisor</option>
+                <option value="2">2. Listen to what supervisor say</option>
+                <option value="3">3. Read what supervisor write</option>
+                <option value="4">4. Write to supervisor</option>
+            </select><br><br>
+
+
+            <label for="communicate_colleagues">19 - How do you usually communicate in Japanese with your COLLEAGUES?: (Press Ctr to Select Multiple Answers).</label><br><br>
+            <select id="communicate_colleagues" name="communicate_colleagues" multiple>
+                <option value="1">1. Talk with colleagues</option>
+                <option value="2">2. Listen to what colleagues say</option>
+                <option value="3">3. Read what colleagues write</option>
+                <option value="4">4. Write to colleagues</option>
+            </select><br><br>
+
+
+            <label for="communicate_CUSTOMERS">20 - How do you usually communicate in Japanese with CUSTOMERS?: (Press Ctr to Select Multiple Answers).</label><br><br>
+            <select id="communicate_CUSTOMERS" name="communicate_CUSTOMERS" multiple>
+                <option value="1">1. Talk with customers</option>
+                <option value="2">2. Listen to what customers say</option>
+                <option value="3">3. Read what customers write</option>
+                <option value="4">4. Write to customers</option>
+            </select><br><br>
+
+            <label for="jlpt_taken">21 ~ 25 - How many times have you taken JLPT?</label><br><br>
+
+            <label for="jlpt_n1">21 - N1:</label>
+            <select id="jlpt_n1" name="jlpt_n1">
+                <option value=" ">Select</option>
+                <!-- Generate options from 1 to 9 -->
+                <script>
+                    for (var i = 0; i <= 8; i++) {
+                        document.write("<option value='" + i + "'>" + i + "</option>");
+                    }
+                    // Add option for "9 or more"
+                    document.write("<option value='9 or more'>9 or more</option>");
+                </script>
+            </select><br><br>
+
+            <label for="jlpt_n2">22 - N2:</label>
+            <select id="jlpt_n2" name="jlpt_n2">
+                <option value=" ">Select</option>
+                <!-- Generate options from 1 to 9 -->
+                <script>
+                    for (var i = 0; i <= 8; i++) {
+                        document.write("<option value='" + i + "'>" + i + "</option>");
+                    }
+                    // Add option for "9 or more"
+                    document.write("<option value='9 or more'>9 or more</option>");
+                </script>
+            </select><br><br>
+
+            <label for="jlpt_n3">23 - N3:</label>
+            <select id="jlpt_n3" name="jlpt_n3">
+                <option value=" ">Select</option>
+                <!-- Generate options from 1 to 9 -->
+                <script>
+                    for (var i = 0; i <= 8; i++) {
+                        document.write("<option value='" + i + "'>" + i + "</option>");
+                    }
+                    // Add option for "9 or more"
+                    document.write("<option value='9 or more'>9 or more</option>");
+                </script>
+            </select><br><br>
+
+            <label for="jlpt_n4">24 - N4:</label>
+            <select id="jlpt_n4" name="jlpt_n4">
+                <option value=" ">Select</option>
+                <!-- Generate options from 1 to 9 -->
+                <script>
+                    for (var i = 0; i <= 8; i++) {
+                        document.write("<option value='" + i + "'>" + i + "</option>");
+                    }
+                    // Add option for "9 or more"
+                    document.write("<option value='9 or more'>9 or more</option>");
+                </script>
+            </select><br><br>
+
+            <label for="jlpt_n5">25 - N5:</label>
+            <select id="jlpt_n5" name="jlpt_n5">
+                <option value=" ">Select</option>
+                <!-- Generate options from 1 to 9 -->
+                <script>
+                    for (var i = 0; i <= 8; i++) {
+                        document.write("<option value='" + i + "'>" + i + "</option>");
+                    }
+                    // Add option for "9 or more"
+                    document.write("<option value='9 or more'>9 or more</option>");
+                </script>
+            </select><br><br>
+            
+            <label for="jlpt_past_result">26～30. Result of the last exam taken.</label><br><br>
+
+            <label for="n1_result">26 - N1/Ex Level 1:</label><br><br>
+            <select id="n1_result" name="n1_result">
+                <option value="">None</option>
+                <option value="1">Pass</option>
+                <option value="2">Fail</option>
+            </select><br><br>
+
+            <label for="n2_result">27 - N2/Ex Level 2:</label><br><br>
+            <select id="n2_result" name="n2_result">
+                <option value="">None</option>
+                <option value="1">Pass</option>
+                <option value="2">Fail</option>
+
+            </select><br><br>
+
+            <label for="n3_result">28 - N3:</label><br><br>
+            <select id="n3_result" name="n3_result">
+                <option value="">None</option>
+                <option value="1">Pass</option>
+                <option value="2">Fail</option>
+            </select><br><br>
+
+            <label for="n4_result">29 - N4/Ex Level 3:</label><br><br>
+            <select id="n4_result" name="n4_result">
+                <option value="">None</option>
+                <option value="1">Pass</option>
+                <option value="2">Fail</option>    
+            </select><br><br>
+
+            <label for="n5_result">30 - N5/Ex Level 4:</label><br><br>
+            <select id="n5_result" name="n5_result">
+                <option value="">None</option>
+                <option value="1">Pass</option>
+                <option value="2">Fail</option>    
+            </select><br><br>
+
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+</body>
+</html>

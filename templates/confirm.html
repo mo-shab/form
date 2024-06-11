@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Your Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 50%;
+            margin: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .button-container {
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Confirm Your Information</h1>
+        <form action="/confirm" method="post">
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Value</th>
+                </tr>
+                {% for key, value in form_data.items() %}
+                <tr>
+                    <td>{{ key.replace('_', ' ').title() }}</td>
+                    <td>{{ value }}</td>
+                    <input type="hidden" name="{{ key }}" value="{{ value }}">
+                </tr>
+                {% endfor %}
+            </table>
+            <div class="button-container">
+                <button type="submit">Confirm</button>
+                <button type="button" onclick="window.history.back()">Edit</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
