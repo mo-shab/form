@@ -1,10 +1,11 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, flash, redirect, url_for
 from models.submit import submit
 import os, csv
 from flask_mail import Mail, Message
 
 
 app = Flask(__name__)
+app.secret_key = 'your_secret_key_here'
 
 mail = Mail(app)
 
@@ -32,14 +33,17 @@ for level in ['1', '2', '3', '4', '5']:
     else:
         jlpt_counters[level] = 1
 
-print(jlpt_counters)
+#@app.after_request
+#def add_header(response):
+#    response.cache_control.no_store = True
+#    return response
 
-@app.route('/')
+@app.route('/', strict_slashes=False)
 def index():
     return render_template('index.html')
 
 
-@app.route('/submit', methods=['POST'])
+@app.route('/submit', methods=['POST'], strict_slashes=False)
 def form_submit():
     if request.method == 'POST':
         # Access form data
@@ -100,7 +104,7 @@ def form_submit():
         print(jlpt_counters)
         # Create a string to write to the file
         string = f"\"{jlpt_level.strip()}\",\"24B\",\"8210101\",\"{jlpt_level.strip()}\",\"{jlpt_counters.get(jlpt_level, 0):04}\",\"{full_name.strip()}\",\"{gender.strip()}\",\"{dob_year.strip()}\",\"{dob_month.strip()}\",\"{dob_day.strip()}\",\"{pass_code.strip()}\",\"{native_language.strip()}\",\"{place_learn_jp.strip()}\",\"{reason_jlpt.strip()}\",\"{occupation.strip()}\",\"{occupation_details.strip()}\",\"{media}\",\"{teacher}\",\"{friends}\",\"{family}\",\"{supervisor}\",\"{colleagues}\",\"{customers}\",\"{jlpt_n1}\",\"{jlpt_n2}\",\"{jlpt_n3}\",\"{jlpt_n4}\",\"{jlpt_n5}\",\"{n1_result.strip()}\",\"{n2_result.strip()}\",\"{n3_result.strip()}\",\"{n4_result.strip()}\",\"{n5_result.strip()}\""
-        infor_string = f"\"{full_name}\", \"{email}\", \"{phone_number}\", \"{adress}\", \"{country}\", \"{zip_code}\""
+        data_string = f'"{jlpt_counters.get(jlpt_level, 0):04}","{jlpt_level}","{test_center}","{full_name}","{gender}","{dob_year}","{dob_month}","{dob_day}","{pass_code}","{native_language}","{nationality}","{adress}","{country}","{zip_code}","{phone_number}","{email}","{institute}"'
 
 
         # Create separate files for each JLPT level
@@ -112,7 +116,7 @@ def form_submit():
             f.write(string + '\n')
 
         with open(infor_file, 'a') as f:
-            f.write(infor_string + '\n')
+            f.write(data_string + '\n')
 
         
         form_data = {
@@ -122,6 +126,7 @@ def form_submit():
             'Year Of Birth': request.form['dob_year'],
             'Month of Birth': request.form['dob_month'],
             'Day Of Birth': request.form['dob_day'],
+            'Nationality': request.form['nationality'].upper(),
             'Pass code': request.form['pass_code'],
             'Native_language': request.form['native_language'].upper(),
             'nationality': request.form['nationality'].upper(),
@@ -131,22 +136,27 @@ def form_submit():
             'phone_number': request.form['phone_number'],
             'email': request.form['email'],
             'institute': request.form['institute'].upper(),
-            'place_learn_jp': request.form['place_learn_jp'].upper(),
         }
         
         return render_template('confirm.html', form_data=form_data)
 
-@app.route('/confirm', methods=['POST'])
+@app.route('/confirm', methods=['POST'], strict_slashes=False)
 def confirm():
     form_data = request.form.to_dict()
-    sender = 'Your Email'
-    msg = Message('JLPT Inscription', sender=sender, recipients=[form_data['email']])  # Change recipient email address
-    msg.body = f"Dear {form_data['Full Name']},\n\nThank you for submitting the form. Your JLPT level is {form_data['JLPT Level']}, Your Passcode is : {form_data['Pass code']}.\n\nBest regards,\nMrCloud."
-    mail.send(msg)
+    full_name = form_data['Full Name']
+    email = form_data['email']
+    #send_email(full_name, email)
     return render_template('success.html')
 
 
-@app.route('/JLPT/N<level>')
+def send_email(full_name, email):
+    sender = 'Your Email'
+    msg = Message('JLPT Inscription', sender=sender, recipients=[email])  # Change recipient email address
+    msg.body = f"Dear {full_name},\n\nThank you for submitting the form. Your JLPT level is {email}.\n\nBest regards,\nMrCloud."
+    mail.send(msg)
+
+
+@app.route('/JLPT/N<level>', strict_slashes=False)
 def get_data(level):
     data_file = f"data_N{level}.csv"
     infor_file = f"infos_N{level}.csv"
@@ -163,6 +173,53 @@ def get_data(level):
             for row in reader:
                 infor.append(row)
     return render_template('data.html', data=data, infor=infor, level=level)
+
+
+@app.route('/delete/<level>/<int:row_number>', methods=['POST', 'GET'], strict_slashes=False)
+def delete_row(level, row_number):
+    data_file = f"data_N{level}.csv"
+    data_file_2 = f"infos_N{level}.csv"
+    if os.path.exists(data_file) and os.path.exists(data_file_2):
+        with open(data_file, 'r') as f:
+            rows = list(csv.reader(f))
+        
+        with open(data_file_2, 'r') as f:
+            rows_2 = list(csv.reader(f))
+
+        if 0 <= row_number < len(rows):
+            name = rows[row_number][5]  # Assuming name is in the 6th column
+            deleted_row = rows.pop(row_number)
+            print(deleted_row)
+
+            # Decrement JLPT counter for remaining rows
+            for i in range(row_number, len(rows)):
+                rows[i][4] = f"{int(rows[i][4]) - 1:04}"  # Assuming JLPT counter is in the 5th column
+            
+            for i in range(row_number, len(rows_2)):
+                rows_2[i][0] = f"{int(rows_2[i][0]) - 1:04}"  # Assuming JLPT counter is in the 1st column
+
+            new_raws = []
+            for row in rows: # Join elements of the row with commas and wrap them in double quotes
+                row_string = ','.join([f'"{i}"' for i in row])
+                new_raws.append(row_string)
+            
+            with open(data_file, 'w', newline='') as f:
+                for row in new_raws:
+                    f.write(row + '\n')
+            
+            with open(data_file_2, 'w', newline='') as f:
+                for row in rows_2:
+                    f.write(','.join(row) + '\n')
+            
+            flash(f"{name} deleted successfully!")
+            return redirect(url_for('get_data', level=level))  # Return the deleted row surrounded by double quotes
+        else:
+            flash("Row number out of range!")
+    else:
+        flash("Data file not found!")
+    
+    return redirect(url_for('get_data', level=level))
+
 
 
 if __name__ == '__main__':

@@ -2,89 +2,96 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JLPT Data</title>
     <style>
+        /* Your CSS styles go here */
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
+            background-color: #f0f0f0;
         }
-        .container {
-            width: 80%;
-            margin: 20px auto;
-        }
-        h2 {
-            margin-bottom: 10px;
+        h1 {
+            color: #333;
         }
         table {
-            width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
+            width: 100%;
         }
         th, td {
+            border: 1px solid #ddd;
             padding: 8px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
         }
         th {
             background-color: #f2f2f2;
         }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        button {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>JLPT Data for Level N{{ level }}</h2>
-        <h3>Data</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Code Number</th>
-                    <th>Full Name</th>
-                    <th>Gender</th>
-                    <th>Birthday</th>
-                    <th>Passcode</th>
-                    <!-- Add more headers as needed -->
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in data %}
-                <tr>
-                    <td>{{ row[1] }} {{ row[2] }} {{ row[3]}}{{ row[4] }}</td>
-                    <td>{{ row[5] }}</td>
-                    <td>{{ row[6] }} </td>
-                    <td>{{ row[7] }} - {{ row[8] }} - {{ row[9] }} </td>
-                    <td>{{ row[10] }}</td>
-                    <!-- Add more cells as needed -->
-                </tr>
+    <h1>JLPT Level N{{ level }} Data</h1>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
                 {% endfor %}
-            </tbody>
-        </table>
-        <h3>Information</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Full Name</th>
-                    <th>Email</th>
-                    <th>Country</th>
-                    <th>Phone Number</th>
-                    <th>Adress</th>
-                    <!-- Add more headers as needed -->
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in infor %}
-                <tr>
-                    <td>{{ row[0] }}</td>
-                    <td>{{ row[1] }}</td>
-                    <td>{{ row[4] }}</td>
-                    <td>{{ row[2] }}</td>
-                    <td>{{ row[4] }}</td>
-                    <!-- Add more cells as needed -->
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <table>
+        <thead>
+            <tr>
+                <th>JLPT Level</th>
+                <th>Full Name</th>
+                <th>Gender</th>
+                <th>Year of Birth</th>
+                <th>Month of Birth</th>
+                <th>Day of Birth</th>
+                <th>Pass Code</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in infor %}
+            <tr>
+                <td>{{ row[1] }}</td>
+                <td>{{ row[3] }}</td>
+                <td>{{ row[4] }}</td>
+                <td>{{ row[5] }}</td>
+                <td>{{ row[6] }}</td>
+                <td>{{ row[7] }}</td>
+                <td>{{ row[8] }}</td>
+                <td>{{ row[15] }}</td>
+                <td>{{ row[14] }}</td>
+                <td>
+                    <form action="{{ url_for('delete_row', level=level, row_number=loop.index0) }}" method="post">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>
