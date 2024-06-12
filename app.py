@@ -10,8 +10,8 @@ mail = Mail(app)
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Your SMTP server address
 app.config['MAIL_PORT'] = 587  # Your SMTP server port
-app.config['MAIL_USERNAME'] = 'tremplin.agence@gmail.com'  # Your email username
-app.config['MAIL_PASSWORD'] = 'ewyeymuytveaevms'  # Your email password
+app.config['MAIL_USERNAME'] = 'YourEmail'  # Your email username
+app.config['MAIL_PASSWORD'] = 'Your Pasword'  # Your email password
 app.config['MAIL_USE_TLS'] = True  # Enable TLS
 app.config['MAIL_USE_SSL'] = False  # Disable SSL
 
@@ -139,7 +139,7 @@ def form_submit():
 @app.route('/confirm', methods=['POST'])
 def confirm():
     form_data = request.form.to_dict()
-    sender = 'tremplin.agence@gmail.com'
+    sender = 'Your Email'
     msg = Message('JLPT Inscription', sender=sender, recipients=[form_data['email']])  # Change recipient email address
     msg.body = f"Dear {form_data['Full Name']},\n\nThank you for submitting the form. Your JLPT level is {form_data['JLPT Level']}, Your Passcode is : {form_data['Pass code']}.\n\nBest regards,\nMrCloud."
     mail.send(msg)
