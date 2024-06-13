@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JLPT Levels</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center; /* Center align content */
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .levels-list {
+            list-style-type: none;
+            padding: 0;
+            text-align: center;
+        }
+
+        .levels-list li {
+            display: inline-block;
+            margin: 10px;
+        }
+
+        .levels-list a {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 18px;
+            color: #fff;
+            background-color: #0066cc;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .levels-list a:hover {
+            background-color: #004999;
+        }
+
+        #logout-form {
+            margin-top: 20px;
+        }
+
+        #logout-form button {
+            background-color: #dc3545; /* Red background color */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        #logout-form button:hover {
+            background-color: #c82333; /* Darker red on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>JLPT Levels</h1>
+        <ul class="levels-list">
+            <li><a href="/JLPT/N5">N5</a></li>
+            <li><a href="/JLPT/N4">N4</a></li>
+            <li><a href="/JLPT/N3">N3</a></li>
+            <li><a href="/JLPT/N2">N2</a></li>
+            <li><a href="/JLPT/N1">N1</a></li>
+        </ul>
+        
+        <form action="{{ url_for('logout') }}" method="post" id="logout-form">
+            <button type="submit">Logout</button>
+        </form>
+    </div>
+</body>
+</html>

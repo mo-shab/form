@@ -1,11 +1,33 @@
-from flask import Flask, request, render_template, flash, redirect, url_for
+from flask import Flask, session, request, render_template, flash, redirect, url_for
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from models.submit import submit
 import os, csv
 from flask_mail import Mail, Message
 
-
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'
+
+# Initialize Flask-Login
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+# Hardcoded user credentials (for demo purposes)
+users = {
+    'shab': {'password': 'shab'}
+}
+
+# User class for Flask-Login (replace with your actual User model if using a database)
+class User(UserMixin):
+    pass
+
+# Load user function for Flask-Login (replace with your actual user loading logic)
+@login_manager.user_loader
+def load_user(user_id):
+    if user_id in users:
+        user = User()
+        user.id = user_id
+        return user
+    return None
 
 mail = Mail(app)
 
@@ -31,17 +53,42 @@ for level in ['1', '2', '3', '4', '5']:
             if last_row is not None:
                 jlpt_counters[level] = int(last_row[4])  # Assuming JLPT counter is in 5th column
     else:
-        jlpt_counters[level] = 1
+        jlpt_counters[level] = 0
 
 #@app.after_request
 #def add_header(response):
 #    response.cache_control.no_store = True
 #    return response
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        if username in users and users[username]['password'] == password:
+            user = User()
+            user.id = username
+            login_user(user)
+            session['logged_in'] = True
+            session['username'] = username
+            return redirect(url_for('jlpt'))  # Redirect to 'jlpt' endpoint
+        else:
+            return 'Invalid username/password combination'
+    return render_template('login.html')
+
+@app.route('/logout', methods=['POST'])
+def logout():
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
+    logout_user()
+    session.pop('logged_in', None)
+    session.pop('username', None)
+    return redirect(url_for('login'))
+
+
 @app.route('/', strict_slashes=False)
 def index():
     return render_template('index.html')
-
 
 @app.route('/submit', methods=['POST'], strict_slashes=False)
 def form_submit():
@@ -102,10 +149,9 @@ def form_submit():
             jlpt_counters[jlpt_level] += 1
         
         print(jlpt_counters)
-        # Create a string to write to the file
+        # Create a string to write to the The candidate information in the file.
         string = f"\"{jlpt_level.strip()}\",\"24B\",\"8210101\",\"{jlpt_level.strip()}\",\"{jlpt_counters.get(jlpt_level, 0):04}\",\"{full_name.strip()}\",\"{gender.strip()}\",\"{dob_year.strip()}\",\"{dob_month.strip()}\",\"{dob_day.strip()}\",\"{pass_code.strip()}\",\"{native_language.strip()}\",\"{place_learn_jp.strip()}\",\"{reason_jlpt.strip()}\",\"{occupation.strip()}\",\"{occupation_details.strip()}\",\"{media}\",\"{teacher}\",\"{friends}\",\"{family}\",\"{supervisor}\",\"{colleagues}\",\"{customers}\",\"{jlpt_n1}\",\"{jlpt_n2}\",\"{jlpt_n3}\",\"{jlpt_n4}\",\"{jlpt_n5}\",\"{n1_result.strip()}\",\"{n2_result.strip()}\",\"{n3_result.strip()}\",\"{n4_result.strip()}\",\"{n5_result.strip()}\""
         data_string = f'"{jlpt_counters.get(jlpt_level, 0):04}","{jlpt_level}","{test_center}","{full_name}","{gender}","{dob_year}","{dob_month}","{dob_day}","{pass_code}","{native_language}","{nationality}","{adress}","{country}","{zip_code}","{phone_number}","{email}","{institute}"'
-
 
         # Create separate files for each JLPT level
         data_file = f"data_N{jlpt_level}.csv"
@@ -117,7 +163,6 @@ def form_submit():
 
         with open(infor_file, 'a') as f:
             f.write(data_string + '\n')
-
         
         form_data = {
             'JLPT Level': request.form['jlpt_level'],
@@ -155,9 +200,17 @@ def send_email(full_name, email):
     msg.body = f"Dear {full_name},\n\nThank you for submitting the form. Your JLPT level is {email}.\n\nBest regards,\nMrCloud."
     mail.send(msg)
 
+@app.route('/JLPT', strict_slashes=False)
+def jlpt():
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
+    #route to display The JLPT Levels Pages
+    return render_template('jlpt.html')
 
 @app.route('/JLPT/N<level>', strict_slashes=False)
 def get_data(level):
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
     data_file = f"data_N{level}.csv"
     infor_file = f"infos_N{level}.csv"
     data = []
@@ -179,6 +232,8 @@ def get_data(level):
 def delete_row(level, row_number):
     data_file = f"data_N{level}.csv"
     data_file_2 = f"infos_N{level}.csv"
+    deleted_info = f"deleted_info_N{level}.csv"
+
     if os.path.exists(data_file) and os.path.exists(data_file_2):
         with open(data_file, 'r') as f:
             rows = list(csv.reader(f))
@@ -188,8 +243,13 @@ def delete_row(level, row_number):
 
         if 0 <= row_number < len(rows):
             name = rows[row_number][5]  # Assuming name is in the 6th column
-            deleted_row = rows.pop(row_number)
-            print(deleted_row)
+            rows.pop(row_number)
+            deleted_row = rows_2.pop(row_number)
+
+            # store the deleted row in a separate file for logging
+            with open(deleted_info, 'a') as f:
+                f.write(','.join(deleted_row) + '\n')
+            
 
             # Decrement JLPT counter for remaining rows
             for i in range(row_number, len(rows)):
