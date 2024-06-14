@@ -1,38 +1,48 @@
+/* General body styles */
 body {
     font-family: Arial, sans-serif;
     background-color: #f2f2f2;
+    margin: 0;
+    padding: 0;
 }
 
+/* Container for the form */
 .container {
     max-width: 600px;
-    margin: 0 auto;
+    margin: 50px auto;
     padding: 20px;
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-h2 {
+/* Headings styles */
+h1, h2 {
     text-align: center;
     color: #333;
 }
 
+/* Label styles */
 label {
     font-weight: bold;
+    display: block;
+    margin-bottom: 10px;
 }
 
+/* Input and select styles */
 select,
 input[type="text"],
 input[type="number"],
 input[type="email"] {
     width: 100%;
     padding: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
 }
 
+/* Submit button styles */
 input[type="submit"] {
     width: 100%;
     padding: 10px;
@@ -41,33 +51,14 @@ input[type="submit"] {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 input[type="submit"]:hover {
     background-color: #0056b3;
 }
 
-/* static/css/style.css */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-}
-
-.container {
-    max-width: 800px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-h1 {
-    text-align: center;
-    color: #333;
-}
-
+/* JLPT level buttons styles */
 .levels-list {
     list-style-type: none;
     padding: 0;
@@ -93,4 +84,106 @@ h1 {
 
 .levels-list a:hover {
     background-color: #004999;
+}
+
+/* Step container styles */
+.step {
+    display: none;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.step.active {
+    display: block;
+}
+
+/* Navigation buttons styles */
+.navigation {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.navigation-buttons button {
+    background-color: #4CAF50; /* Green background */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.navigation-buttons button:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+/* Invalid input styles */
+input.invalid {
+    border-color: red;
+}
+
+.error-message {
+    color: red;
+    font-size: 12px;
+}
+
+/* Checkbox group styling */
+.checkbox-group label {
+    display: block;
+    margin: 5px 0;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+/* Inline CSS for styling */
+.btn-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.btn {
+    background-color: #4CAF50; /* Green background */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.btn.active {
+    background-color: #80d8db; /* Darker green when active */
+}
+
+.btn:hover {
+    background-color: #218838; /* Darker green on hover */
+}
+
+/* Checkbox styling */
+input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+/* Checkbox label styling */
+#media_jp label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 16px;
+    cursor: pointer;
 }

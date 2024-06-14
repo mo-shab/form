@@ -1,6 +1,5 @@
 from flask import Flask, session, request, render_template, flash, redirect, url_for
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-from models.submit import submit
 import os, csv
 from flask_mail import Mail, Message
 
@@ -80,14 +79,16 @@ def login():
 def logout():
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
-    logout_user()
-    session.pop('logged_in', None)
-    session.pop('username', None)
-    return redirect(url_for('login'))
+    else:
+        logout_user()
+        session.pop('logged_in', None)
+        session.pop('username', None)
+        return redirect(url_for('login'))
 
 
 @app.route('/', strict_slashes=False)
 def index():
+    print("Main Page")
     return render_template('index.html')
 
 @app.route('/submit', methods=['POST'], strict_slashes=False)
@@ -95,6 +96,9 @@ def form_submit():
     if request.method == 'POST':
         # Access form data
         jlpt_level = request.form['jlpt_level']
+        if jlpt_level not in ['1', '2', '3', '4', '5']:
+            flash("Invalid JLPT level!")
+            return redirect(url_for('index'))
         test_center = request.form['test_center']
         full_name = request.form['full_name'].upper()
         gender = request.form['gender']
@@ -187,6 +191,7 @@ def form_submit():
 
 @app.route('/confirm', methods=['POST'], strict_slashes=False)
 def confirm():
+    print("confirm Page")
     form_data = request.form.to_dict()
     full_name = form_data['Full Name']
     email = form_data['email']
@@ -204,28 +209,30 @@ def send_email(full_name, email):
 def jlpt():
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
-    #route to display The JLPT Levels Pages
-    return render_template('jlpt.html')
+    else:
+        #route to display The JLPT Levels Pages
+        return render_template('jlpt.html')
 
 @app.route('/JLPT/N<level>', strict_slashes=False)
 def get_data(level):
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
-    data_file = f"data_N{level}.csv"
-    infor_file = f"infos_N{level}.csv"
-    data = []
-    infor = []
-    if os.path.exists(data_file):
-        with open(data_file, 'r') as f:
-            reader = csv.reader(f)
-            for row in reader:
-                data.append(row)
-    if os.path.exists(infor_file):
-        with open(infor_file, 'r') as f:
-            reader = csv.reader(f)
-            for row in reader:
-                infor.append(row)
-    return render_template('data.html', data=data, infor=infor, level=level)
+    else:
+        data_file = f"data_N{level}.csv"
+        infor_file = f"infos_N{level}.csv"
+        data = []
+        infor = []
+        if os.path.exists(data_file):
+            with open(data_file, 'r') as f:
+                reader = csv.reader(f)
+                for row in reader:
+                    data.append(row)
+        if os.path.exists(infor_file):
+            with open(infor_file, 'r') as f:
+                reader = csv.reader(f)
+                for row in reader:
+                    infor.append(row)
+        return render_template('data.html', data=data, infor=infor, level=level)
 
 
 @app.route('/delete/<level>/<int:row_number>', methods=['POST', 'GET'], strict_slashes=False)
