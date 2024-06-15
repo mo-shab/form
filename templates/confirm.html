@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Confirm Your Information</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -29,6 +30,7 @@
         }
         .button-container {
             text-align: center;
+            margin-top: 20px;
         }
         button {
             padding: 10px 20px;
@@ -40,25 +42,51 @@
 <body>
     <div class="container">
         <h1>Confirm Your Information</h1>
-        <form action="/confirm" method="post">
+        <form id="confirmationForm" action="/confirm" method="post">
             <table>
                 <tr>
                     <th>Field</th>
-                    <th>Value</th>
+                    <th>Informations</th>
                 </tr>
-                {% for key, value in form_data.items() %}
                 <tr>
-                    <td>{{ key.replace('_', ' ').title() }}</td>
-                    <td>{{ value }}</td>
+                    <td>JLPT Level</td>
+                    <td>{{ form_data['jlpt_level'] }}</td>
+                </tr>
+                <tr>
+                    <td>Test Center</td>
+                    <td>{{ form_data['test_center'] }}</td>
                     <input type="hidden" name="{{ key }}" value="{{ value }}">
                 </tr>
-                {% endfor %}
+                <tr>
+                    <td> Full Name</td>
+                    <td>{{ form_data['full_name'] }}</td>
+                </tr>
             </table>
             <div class="button-container">
-                <button type="submit">Confirm</button>
+                <button type="submit" onclick="generatePDF()">Confirm</button>
                 <button type="button" onclick="window.history.back()">Edit</button>
             </div>
         </form>
     </div>
+
+    <script>
+        function generatePDF() {
+        // Select the container element that holds the content to be converted into PDF
+        var element = document.querySelector('.container');
+
+        // Options for the PDF generation
+        var opt = {
+            margin:       1,
+            filename:     'confirmation.pdf',
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2 },
+            jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+
+        // Start PDF generation using html2pdf.js
+        html2pdf().set(opt).from(element).save();
+    }
+    </script>
+    
 </body>
 </html>

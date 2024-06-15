@@ -8,9 +8,9 @@ body {
 
 /* Container for the form */
 .container {
-    max-width: 600px;
+    max-width: 500px;
     margin: 50px auto;
-    padding: 20px;
+    padding: 40px;
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -179,9 +179,49 @@ input.invalid {
 input[type="checkbox"] {
     margin-right: 10px;
 }
-
+#communicate_teacher label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
 /* Checkbox label styling */
 #media_jp label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#communicate_friends label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#communicate_family label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#communicate_supervisor label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#communicate_colleagues label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#communicate_CUSTOMERS label {
     display: block;
     margin-bottom: 10px;
     font-size: 16px;

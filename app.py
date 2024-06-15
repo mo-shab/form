@@ -52,12 +52,13 @@ for level in ['1', '2', '3', '4', '5']:
             if last_row is not None:
                 jlpt_counters[level] = int(last_row[4])  # Assuming JLPT counter is in 5th column
     else:
-        jlpt_counters[level] = 0
+        jlpt_counters[level] = 1
 
 #@app.after_request
 #def add_header(response):
 #    response.cache_control.no_store = True
 #    return response
+temp_data = {}
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -86,116 +87,100 @@ def logout():
         return redirect(url_for('login'))
 
 
-@app.route('/', strict_slashes=False)
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    print("Main Page")
+    if request.method == 'POST':
+        # Assuming this is your initial form submission route
+        temp_data['jlpt_level'] = request.form['jlpt_level']
+        temp_data['test_center'] = request.form['test_center']
+        temp_data['full_name'] = request.form['full_name'].upper()
+        temp_data['gender'] = request.form['gender']
+        temp_data['dob_year'] = request.form['dob_year']
+        temp_data['dob_month'] = request.form['dob_month']
+        temp_data['dob_day'] = request.form['dob_day']
+        temp_data['pass_code'] = request.form['pass_code']
+        temp_data['native_language'] = request.form['native_language']
+        temp_data['nationality'] = request.form['nationality']
+        temp_data['adress'] = request.form['adress']
+        temp_data['country'] = request.form['country']
+        temp_data['zip_code'] = request.form['zip_code']
+        temp_data['phone_number'] = request.form['phone_number']
+        temp_data['email'] = request.form['email']
+        temp_data['institute'] = request.form['institute']
+        temp_data['place_learn_jp'] = request.form['place_learn_jp']
+        temp_data['reason_jlpt'] = request.form['reason_jlpt']
+        temp_data['occupation'] = request.form['occupation']
+        temp_data['occupation_details'] = request.form['occupation_details']
+        temp_data['media_jp'] = ''.join(choice if choice in request.form.getlist('media_jp') else ' ' for choice in ['1', '2', '3', '4', '5', '6', '7', '8', '9'])
+        temp_data['communicate_teacher'] = ''.join(choice if choice in request.form.getlist('communicate_teacher') else ' ' for choice in ['1', '2', '3', '4'])
+        temp_data['communicate_friends'] = ''.join(choice if choice in request.form.getlist('communicate_friends') else ' ' for choice in ['1', '2', '3', '4'])
+        temp_data['communicate_family'] = ''.join(choice if choice in request.form.getlist('communicate_family') else ' ' for choice in ['1', '2', '3', '4'])
+        temp_data['communicate_supervisor'] = ''.join(choice if choice in request.form.getlist('communicate_supervisor') else ' ' for choice in ['1', '2', '3', '4'])
+        temp_data['communicate_colleagues'] = ''.join(choice if choice in request.form.getlist('communicate_colleagues') else ' ' for choice in ['1', '2', '3', '4'])
+        temp_data['communicate_CUSTOMERS'] = ''.join(choice if choice in request.form.getlist('communicate_CUSTOMERS') else ' ' for choice in ['1', '2', '3', '4'])
+        temp_data['jlpt_n1'] = ' ' if request.form['jlpt_n1'] == '0' else request.form['jlpt_n1']
+        temp_data['jlpt_n2'] = ' ' if request.form['jlpt_n2'] == '0' else request.form['jlpt_n2']
+        temp_data['jlpt_n3'] = ' ' if request.form['jlpt_n3'] == '0' else request.form['jlpt_n3']
+        temp_data['jlpt_n4'] = ' ' if request.form['jlpt_n4'] == '0' else request.form['jlpt_n4']
+        temp_data['jlpt_n5'] = ' ' if request.form['jlpt_n5'] == '0' else request.form['jlpt_n5']
+        
+        # Render confirmation page with temporary data
+        return render_template('confirm.html', form_data=temp_data)
+
+    # Render initial form if GET request
     return render_template('index.html')
 
-@app.route('/submit', methods=['POST'], strict_slashes=False)
-def form_submit():
-    if request.method == 'POST':
-        # Access form data
-        jlpt_level = request.form['jlpt_level']
-        if jlpt_level not in ['1', '2', '3', '4', '5']:
-            flash("Invalid JLPT level!")
-            return redirect(url_for('index'))
-        test_center = request.form['test_center']
-        full_name = request.form['full_name'].upper()
-        gender = request.form['gender']
-        dob_year = request.form['dob_year']
-        dob_month = request.form['dob_month']
-        dob_day = request.form['dob_day']
-        pass_code = request.form['pass_code']
-        native_language = request.form['native_language']
-        nationality = request.form['nationality']
-        adress = request.form['adress']
-        country = request.form['country']
-        zip_code = request.form['zip_code']
-        phone_number = request.form['phone_number']
-        email = request.form['email']
-        institute = request.form['institute']
-        place_learn_jp = request.form['place_learn_jp']
-        reason_jlpt = request.form['reason_jlpt']
-        occupation = request.form['occupation']
-        occupation_details = request.form['occupation_details']
-        media_jp = request.form.getlist('media_jp')
-        media = ''.join(choice if choice in media_jp else ' ' for choice in ['1', '2', '3', '4', '5', '6', '7', '8', '9'])
-        communicate_teacher = request.form.getlist('communicate_teacher')
-        teacher = ''.join(choice if choice in communicate_teacher else ' ' for choice in ['1', '2', '3', '4'])
-        communicate_friends = request.form.getlist('communicate_friends')
-        friends = ''.join(choice if choice in communicate_friends else ' ' for choice in ['1', '2', '3', '4'])
-        communicate_family = request.form.getlist('communicate_family')
-        family = ''.join(choice if choice in communicate_family else ' ' for choice in ['1', '2', '3', '4'])
-        communicate_supervisor = request.form.getlist('communicate_supervisor')
-        supervisor = ''.join(choice if choice in communicate_supervisor else ' ' for choice in ['1', '2', '3', '4'])
-        communicate_colleagues = request.form.getlist('communicate_colleagues')
-        colleagues = ''.join(choice if choice in communicate_colleagues else ' ' for choice in ['1', '2', '3', '4'])
-        communicate_CUSTOMERS = request.form.getlist('communicate_CUSTOMERS')
-        customers = ''.join(choice if choice in communicate_CUSTOMERS else ' ' for choice in ['1', '2', '3', '4'])
-        jlpt_n1 = request.form['jlpt_n1']
-        jlpt_n2 = request.form['jlpt_n2']
-        jlpt_n3 = request.form['jlpt_n3']
-        jlpt_n4 = request.form['jlpt_n4']
-        jlpt_n5 = request.form['jlpt_n5']
-        n1_result = request.form['n1_result']
-        n2_result = request.form['n2_result']
-        n3_result = request.form['n3_result']
-        n4_result = request.form['n4_result']
-        n5_result = request.form['n5_result']
-
-        jlpt_n1 = ' ' if jlpt_n1 == '0' else jlpt_n1
-        jlpt_n2 = ' ' if jlpt_n2 == '0' else jlpt_n2
-        jlpt_n3 = ' ' if jlpt_n3 == '0' else jlpt_n3
-        jlpt_n4 = ' ' if jlpt_n4 == '0' else jlpt_n4
-        jlpt_n5 = ' ' if jlpt_n5 == '0' else jlpt_n5
-
-        if jlpt_level in jlpt_counters:
-            jlpt_counters[jlpt_level] += 1
-        
-        print(jlpt_counters)
-        # Create a string to write to the The candidate information in the file.
-        string = f"\"{jlpt_level.strip()}\",\"24B\",\"8210101\",\"{jlpt_level.strip()}\",\"{jlpt_counters.get(jlpt_level, 0):04}\",\"{full_name.strip()}\",\"{gender.strip()}\",\"{dob_year.strip()}\",\"{dob_month.strip()}\",\"{dob_day.strip()}\",\"{pass_code.strip()}\",\"{native_language.strip()}\",\"{place_learn_jp.strip()}\",\"{reason_jlpt.strip()}\",\"{occupation.strip()}\",\"{occupation_details.strip()}\",\"{media}\",\"{teacher}\",\"{friends}\",\"{family}\",\"{supervisor}\",\"{colleagues}\",\"{customers}\",\"{jlpt_n1}\",\"{jlpt_n2}\",\"{jlpt_n3}\",\"{jlpt_n4}\",\"{jlpt_n5}\",\"{n1_result.strip()}\",\"{n2_result.strip()}\",\"{n3_result.strip()}\",\"{n4_result.strip()}\",\"{n5_result.strip()}\""
-        data_string = f'"{jlpt_counters.get(jlpt_level, 0):04}","{jlpt_level}","{test_center}","{full_name}","{gender}","{dob_year}","{dob_month}","{dob_day}","{pass_code}","{native_language}","{nationality}","{adress}","{country}","{zip_code}","{phone_number}","{email}","{institute}"'
-
-        # Create separate files for each JLPT level
-        data_file = f"data_N{jlpt_level}.csv"
-        infor_file = f"infos_N{jlpt_level}.csv"
-
-        # Write the string and infor_string to their respective files
-        with open(data_file, 'a') as f:
-            f.write(string + '\n')
-
-        with open(infor_file, 'a') as f:
-            f.write(data_string + '\n')
-        
-        form_data = {
-            'JLPT Level': request.form['jlpt_level'],
-            'Full Name': request.form['full_name'].upper(),
-            'Gender': request.form['gender'].upper(),
-            'Year Of Birth': request.form['dob_year'],
-            'Month of Birth': request.form['dob_month'],
-            'Day Of Birth': request.form['dob_day'],
-            'Nationality': request.form['nationality'].upper(),
-            'Pass code': request.form['pass_code'],
-            'Native_language': request.form['native_language'].upper(),
-            'nationality': request.form['nationality'].upper(),
-            'adress': request.form['adress'].upper(),
-            'country': request.form['country'].upper(),
-            'zip_code': request.form['zip_code'],
-            'phone_number': request.form['phone_number'],
-            'email': request.form['email'],
-            'institute': request.form['institute'].upper(),
-        }
-        
-        return render_template('confirm.html', form_data=form_data)
-
-@app.route('/confirm', methods=['POST'], strict_slashes=False)
+@app.route('/confirm', methods=['POST'])
 def confirm():
-    print("confirm Page")
-    form_data = request.form.to_dict()
-    full_name = form_data['Full Name']
-    email = form_data['email']
-    #send_email(full_name, email)
+    # Process and store data after user confirmation
+    jlpt_level = temp_data['jlpt_level']
+    test_center = temp_data['test_center']
+    full_name = temp_data['full_name']
+    gender = temp_data['gender']
+    dob_year = temp_data['dob_year']
+    dob_month = temp_data['dob_month']
+    dob_day = temp_data['dob_day']
+    pass_code = temp_data['pass_code']
+    native_language = temp_data['native_language']
+    nationality = temp_data['nationality']
+    adress = temp_data['adress']
+    country = temp_data['country']
+    zip_code = temp_data['zip_code']
+    phone_number = temp_data['phone_number']
+    email = temp_data['email']
+    institute = temp_data['institute']
+    place_learn_jp = temp_data['place_learn_jp']
+    reason_jlpt = temp_data['reason_jlpt']
+    occupation = temp_data['occupation']
+    occupation_details = temp_data['occupation_details']
+    media = temp_data['media_jp']
+    teacher = temp_data['communicate_teacher']
+    friends = temp_data['communicate_friends']
+    family = temp_data['communicate_family']
+    supervisor = temp_data['communicate_supervisor']
+    colleagues = temp_data['communicate_colleagues']
+    customers = temp_data['communicate_CUSTOMERS']
+    jlpt_n1 = temp_data['jlpt_n1']
+    jlpt_n2 = temp_data['jlpt_n2']
+    jlpt_n3 = temp_data['jlpt_n3']
+    jlpt_n4 = temp_data['jlpt_n4']
+    jlpt_n5 = temp_data['jlpt_n5']
+
+    # Process and store data as needed (e.g., write to files, send email)
+    # Example: writing to CSV files
+    with open(f"data_N{jlpt_level}.csv", 'a') as f:
+        f.write(f"\"{jlpt_level.strip()}\",\"24B\",\"8210101\",\"{jlpt_level.strip()}\",\"0000\",\"{full_name.strip()}\",\"{gender.strip()}\",\"{dob_year.strip()}\",\"{dob_month.strip()}\",\"{dob_day.strip()}\",\"{pass_code.strip()}\",\"{native_language.strip()}\",\"{place_learn_jp.strip()}\",\"{reason_jlpt.strip()}\",\"{occupation.strip()}\",\"{occupation_details.strip()}\",\"{media}\",\"{teacher}\",\"{friends}\",\"{family}\",\"{supervisor}\",\"{colleagues}\",\"{customers}\",\"{jlpt_n1}\",\"{jlpt_n2}\",\"{jlpt_n3}\",\"{jlpt_n4}\",\"{jlpt_n5}\",\" \"\n")
+    
+    with open(f"infos_N{jlpt_level}.csv", 'a') as f:
+        f.write(f"\"0000\",\"{jlpt_level}\",\"{test_center}\",\"{full_name}\",\"{gender}\",\"{dob_year}\",\"{dob_month}\",\"{dob_day}\",\"{pass_code}\",\"{native_language}\",\"{nationality}\",\"{adress}\",\"{country}\",\"{zip_code}\",\"{phone_number}\",\"{email}\",\"{institute}\"\n")
+
+    # Optionally, send an email or perform other actions here
+    # send_email(full_name, email)
+
+    # Clear temporary data after processing
+    temp_data.clear()
+
+    # Render success page after confirmation
     return render_template('success.html')
 
 
