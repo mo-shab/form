@@ -52,7 +52,7 @@ for level in ['1', '2', '3', '4', '5']:
             if last_row is not None:
                 jlpt_counters[level] = int(last_row[4])  # Assuming JLPT counter is in 5th column
     else:
-        jlpt_counters[level] = 1
+        jlpt_counters[level] = 0
 
 #@app.after_request
 #def add_header(response):
@@ -123,6 +123,11 @@ def index():
         temp_data['jlpt_n3'] = ' ' if request.form['jlpt_n3'] == '0' else request.form['jlpt_n3']
         temp_data['jlpt_n4'] = ' ' if request.form['jlpt_n4'] == '0' else request.form['jlpt_n4']
         temp_data['jlpt_n5'] = ' ' if request.form['jlpt_n5'] == '0' else request.form['jlpt_n5']
+        temp_data['n1_result'] = request.form['n1_result']
+        temp_data['n2_result'] = request.form['n2_result']
+        temp_data['n3_result'] = request.form['n3_result']
+        temp_data['n4_result'] = request.form['n4_result']
+        temp_data['n5_result'] = request.form['n5_result']
         
         # Render confirmation page with temporary data
         return render_template('confirm.html', form_data=temp_data)
@@ -165,16 +170,24 @@ def confirm():
     jlpt_n3 = temp_data['jlpt_n3']
     jlpt_n4 = temp_data['jlpt_n4']
     jlpt_n5 = temp_data['jlpt_n5']
+    n1_result = temp_data['n1_result']
+    n2_result = temp_data['n2_result']
+    n3_result = temp_data['n3_result']
+    n4_result = temp_data['n4_result']
+    n5_result = temp_data['n5_result']
+
+    # Increment JLPT counter for the level
+    jlpt_counters[jlpt_level] += 1
 
     # Process and store data as needed (e.g., write to files, send email)
-    # Example: writing to CSV files
+
     with open(f"data_N{jlpt_level}.csv", 'a') as f:
-        f.write(f"\"{jlpt_level.strip()}\",\"24B\",\"8210101\",\"{jlpt_level.strip()}\",\"0000\",\"{full_name.strip()}\",\"{gender.strip()}\",\"{dob_year.strip()}\",\"{dob_month.strip()}\",\"{dob_day.strip()}\",\"{pass_code.strip()}\",\"{native_language.strip()}\",\"{place_learn_jp.strip()}\",\"{reason_jlpt.strip()}\",\"{occupation.strip()}\",\"{occupation_details.strip()}\",\"{media}\",\"{teacher}\",\"{friends}\",\"{family}\",\"{supervisor}\",\"{colleagues}\",\"{customers}\",\"{jlpt_n1}\",\"{jlpt_n2}\",\"{jlpt_n3}\",\"{jlpt_n4}\",\"{jlpt_n5}\",\" \"\n")
+        f.write(f"\"{jlpt_level.strip()}\",\"24B\",\"8210101\",\"{jlpt_level.strip()}\",\"{str(jlpt_counters[jlpt_level]).zfill(4)}\",\"{full_name.strip()}\",\"{gender.strip()}\",\"{dob_year.strip()}\",\"{dob_month.strip()}\",\"{dob_day.strip()}\",\"{pass_code.strip()}\",\"{native_language.strip()}\",\"{place_learn_jp.strip()}\",\"{reason_jlpt.strip()}\",\"{occupation.strip()}\",\"{occupation_details.strip()}\",\"{media}\",\"{teacher}\",\"{friends}\",\"{family}\",\"{supervisor}\",\"{colleagues}\",\"{customers}\",\"{jlpt_n1}\",\"{jlpt_n2}\",\"{jlpt_n3}\",\"{jlpt_n4}\",\"{jlpt_n5}\",\"{n1_result}\",\"{n2_result}\",\"{n3_result}\",\"{n4_result}\",\"{n5_result}\"\n")
     
     with open(f"infos_N{jlpt_level}.csv", 'a') as f:
-        f.write(f"\"0000\",\"{jlpt_level}\",\"{test_center}\",\"{full_name}\",\"{gender}\",\"{dob_year}\",\"{dob_month}\",\"{dob_day}\",\"{pass_code}\",\"{native_language}\",\"{nationality}\",\"{adress}\",\"{country}\",\"{zip_code}\",\"{phone_number}\",\"{email}\",\"{institute}\"\n")
+        f.write(f"\"{jlpt_counters[jlpt_level]}\",\"{jlpt_level}\",\"{test_center}\",\"{full_name}\",\"{gender}\",\"{dob_year}\",\"{dob_month}\",\"{dob_day}\",\"{pass_code}\",\"{native_language}\",\"{nationality}\",\"{adress}\",\"{country}\",\"{zip_code}\",\"{phone_number}\",\"{email}\",\"{institute}\"\n")
 
-    # Optionally, send an email or perform other actions here
+    # Function to send Email to the JLPT candidate
     # send_email(full_name, email)
 
     # Clear temporary data after processing

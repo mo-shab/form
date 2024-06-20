@@ -114,31 +114,12 @@
                     <td>{{form_data['email']}}</td>
                 </tr>
             </table>
+            
             <div class="button-container">
                 <button type="submit" onclick="generatePDF()">Confirm</button>
                 <button type="button" onclick="window.history.back()">Edit</button>
             </div>
         </form>
     </div>
-
-    <script>
-        function generatePDF() {
-        // Select the container element that holds the content to be converted into PDF
-        var element = document.querySelector('.container');
-
-        // Options for the PDF generation
-        var opt = {
-            margin:       1,
-            filename:     'confirmation.pdf',
-            image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 2 },
-            jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-        };
-
-        // Start PDF generation using html2pdf.js
-        html2pdf().set(opt).from(element).save();
-    }
-    </script>
-    
 </body>
 </html>
