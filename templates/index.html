@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JLPT Registration Form - Step 1</title>
     <link rel="stylesheet" href="static/styles.css">
+    <!-- Include jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <!-- Include jQuery UI -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-ui-dist@1.12.1/jquery-ui.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery-ui-dist@1.12.1/jquery-ui.min.js"></script>
+    
 </head>
 <body>
     <div class="container">
@@ -52,6 +58,8 @@
 
                 <label for="pass_code">8-Digit Pass Code:</label><br><br>
                 <input type="text" id="pass_code" name="pass_code" pattern="\d{8}" title="Please enter 8 digits." required><br><br>
+                <label for="confim_code">Confirmation of your 8-Digit Pass Code:</label><br><br>
+                <input type="text" id="confim_code" name="confim_code" pattern="\d{8}" title="Please Confirm YOur 8 Digit Passcode" required><br><br>
             </div>
 
             <!-- Step 4 (Native Language, Nationality)-->
@@ -63,6 +71,7 @@
                     <option value="408">English</option>
                     <option value="411">French</option>
                     <option value="430">Spanish</option>
+                    <option value="001">Japanese</option>
                     <option value="000">Other</option>
                 </select><br><br>
 
@@ -70,7 +79,7 @@
                 <input type="text" id="nationality" name="nationality" required><br><br>
               </div>
 
-            <!--Step 5-->
+            <!--Step 5 (Adress)-->
             <div class="step">
                 <label for="adress">Address:</label><br><br>
                 <input type="text" id="adress" name="adress" required><br><br>
@@ -97,7 +106,7 @@
                 </script>
             </div>
 
-            <!-- Step 6 -->
+            <!-- Step 6 ( ZIP Code, Phone Number, Email)-->
              <div class="step">
                 <lable for="zip_code"><strong>Zip Code:</strong></lable><br><br>
                 <input type="text" id="zip_code" name="zip_code" required><br><br>
@@ -107,9 +116,12 @@
 
                 <label for="email">Email Adress:</label><br><br>
                 <input type="email" id="email" name="email" required><br><br>
+
+                <label for="confirm_email"> COnfim Your Email</label><br><br>
+                <input type="confirm_email" id="confirm_email" name="confirm_email" required><br><br>
             </div>
 
-            <!-- Step 7-->
+            <!-- Step 7 (institute)-->
              <div class="step">
                 <label for="institute">Institution where you study/studied Japanese Language:</label>
                 <input type="text" id="institute" name="institute" required><br><br>
@@ -125,7 +137,7 @@
                 </select><br><br>
              </div>
 
-            <!-- Step 8-->
+            <!-- Step 8 (Reason FOR JLPT, Occupation)-->
             <div class="step">
                 <label for="reason_jlpt">Reason for taking this JLPT exam:</label><br><br>
                 <select id="reason_jlpt" name="reason_jlpt" required>
@@ -138,10 +150,7 @@
                     <option value="7">None of the above; to measure my own level of proficiency</option>
                     <option value="8">None of the above</option>
                 </select><br><br>
-            </div>
 
-            <!--Step 9-->
-            <div class="step">
                 <label for="occupation">Occupation:</label><br><br>
                 <select id="occupation" name="occupation" required>
                     <option value="1">Elementary school student (primary education).</option>
@@ -151,10 +160,7 @@
                     <option value="5">Employed (company employee, public servant, educator, self-employed, etc.).</option>
                     <option value="6">Other.</option>
                 </select><br><br>
-            </div>
 
-            <!--Step 10-->
-            <div class="step">
                 <label for="occupation_details">Occupation details:</label><br><br>
                 <select id="occupation_details" name="occupation_details" required>
                     <option value="1">Use Japanese to teach Japanese-language as a TEACHER</option>
@@ -165,8 +171,8 @@
                     <option value="6">Do not use Japanese while working</option>
                 </select><br><br>
             </div>
-            
-            <!-- Step 11 -->
+
+            <!-- Step 9 (media)-->
              <div class="step">
                 <label for="media_jp">Media via which you come into contact with Japanese Language:</label><br><br>
                 <div id="media_jp">
@@ -180,10 +186,7 @@
                     <label><input type="checkbox" name="media_jp" value="8"> Other</label><br>
                     <label><input type="checkbox" name="media_jp" value="9"> Only come into contact with Japanese language inside the class</label><br>
                 </div><br><br>
-            </div>
-
-            <!-- Step 12 -->
-            <div class="step">
+                
                 <label for="communicate_teacher">How do you usually communicate in Japanese with your TEACHER?</label><br><br>
                 <div id="communicate_teacher" class="checkbox-group">
                     <label><input type="checkbox" name="communicate_teacher" value="1"> Talk with the teacher</label>
@@ -191,10 +194,7 @@
                     <label><input type="checkbox" name="communicate_teacher" value="3"> Read what the teacher writes</label>
                     <label><input type="checkbox" name="communicate_teacher" value="4"> Write to the teacher</label>
                 </div><br><br>
-            </div>
 
-            <!-- Step 13 -->
-            <div class="step">
                 <label for="communicate_friends">How do you usually communicate in Japanese with your FRIENDS?</label><br><br>
                 <div id="communicate_friends" class="checkbox-group">
                     <label><input type="checkbox" name="communicate_friends" value="1"> Talk with friends</label>
@@ -202,10 +202,8 @@
                     <label><input type="checkbox" name="communicate_friends" value="3"> Read what friends write</label>
                     <label><input type="checkbox" name="communicate_friends" value="4"> Write to friends</label>
                 </div><br><br>
-            </div>
 
-            <!-- Step 14 -->
-            <div class="step">
+
                 <label for="communicate_family">How do you usually communicate in Japanese with your FAMILY?</label><br><br>
                 <div id="communicate_family" class="checkbox-group">
                     <label><input type="checkbox" name="communicate_family" value="1"> Talk with family</label>
@@ -213,10 +211,8 @@
                     <label><input type="checkbox" name="communicate_family" value="3"> Read what family writes</label>
                     <label><input type="checkbox" name="communicate_family" value="4"> Write to family</label>
                 </div><br><br>
-            </div>
 
-            <!-- Step 15 -->
-            <div class="step">
+
                 <label for="communicate_supervisor">How do you usually communicate in Japanese with your SUPERVISOR?</label><br><br>
                 <div id="communicate_supervisor" class="checkbox-group">
                     <label><input type="checkbox" name="communicate_supervisor" value="1"> Talk with the supervisor</label>
@@ -224,10 +220,8 @@
                     <label><input type="checkbox" name="communicate_supervisor" value="3"> Read what supervisor writes</label>
                     <label><input type="checkbox" name="communicate_supervisor" value="4"> Write to supervisor</label>
                 </div><br><br>
-            </div>
 
-            <!-- Step 16 -->
-            <div class="step">
+
                 <label for="communicate_colleagues">How do you usually communicate in Japanese with your COLLEAGUES?</label><br><br>
                 <div id="communicate_colleagues" class="checkbox-group">
                     <label><input type="checkbox" name="communicate_colleagues" value="1"> Talk with colleagues</label>
@@ -235,10 +229,7 @@
                     <label><input type="checkbox" name="communicate_colleagues" value="3"> Read what colleagues write</label>
                     <label><input type="checkbox" name="communicate_colleagues" value="4"> Write to colleagues</label>
                 </div><br><br>
-            </div>
 
-            <!-- Step 17 -->
-            <div class="step">
                 <label for="communicate_CUSTOMERS">How do you usually communicate in Japanese with CUSTOMERS?</label><br><br>
                 <div id="communicate_CUSTOMERS" class="checkbox-group">
                     <label><input type="checkbox" name="communicate_CUSTOMERS" value="1"> Talk with customers</label>
@@ -248,7 +239,7 @@
                 </div><br><br>
             </div>
 
-             <!-- Step 18 -->
+             <!-- Step 10 -->
              <div class="step">
                 <label for="jlpt_taken">How many times have you taken JLPT?</label><br><br>
             
@@ -259,7 +250,7 @@
                         for (var i = 0; i <= 8; i++) {
                             document.write("<option value='" + i + "'>" + i + "</option>");
                         }
-                        document.write("<option value='9 or more'>9 or more</option>");
+                        document.write("<option value='9'>9 or more</option>");
                     </script>
                 </select>
             
@@ -270,7 +261,7 @@
                         for (var i = 0; i <= 8; i++) {
                             document.write("<option value='" + i + "'>" + i + "</option>");
                         }
-                        document.write("<option value='9 or more'>9 or more</option>");
+                        document.write("<option value='9'>9 or more</option>");
                     </script>
                 </select>
             
@@ -281,7 +272,7 @@
                         for (var i = 0; i <= 8; i++) {
                             document.write("<option value='" + i + "'>" + i + "</option>");
                         }
-                        document.write("<option value='9 or more'>9 or more</option>");
+                        document.write("<option value='9'>9 or more</option>");
                     </script>
                 </select>
             
@@ -292,7 +283,7 @@
                         for (var i = 0; i <= 8; i++) {
                             document.write("<option value='" + i + "'>" + i + "</option>");
                         }
-                        document.write("<option value='9 or more'>9 or more</option>");
+                        document.write("<option value='9'>9 or more</option>");
                     </script>
                 </select>
             
@@ -303,12 +294,12 @@
                         for (var i = 0; i <= 8; i++) {
                             document.write("<option value='" + i + "'>" + i + "</option>");
                         }
-                        document.write("<option value='9 or more'>9 or more</option>");
+                        document.write("<option value='9'>9 or more</option>");
                     </script>
                 </select>
             </div>
           
-            <!-- Step 19 -->
+            <!-- Step 11 -->
             <div class="step">
                 <label for="jlpt_past_result">Result of the last exam taken.</label>
 
@@ -347,6 +338,7 @@
                     <option value="2">Fail</option>
                 </select>
             </div>
+
             <!-- Navigation buttons -->
             <div class="navigation-buttons">
                 <!-- Conditional rendering for previous button -->
@@ -359,5 +351,6 @@
         </form>
     </div>
     <script src="static/script.js"></script>
+    <script src="static/nationalities.js"></script>
 </body>
 </html>

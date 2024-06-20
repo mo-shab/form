@@ -45,21 +45,73 @@
         <form id="confirmationForm" action="/confirm" method="post">
             <table>
                 <tr>
-                    <th>Field</th>
+                    <th></th>
                     <th>Informations</th>
                 </tr>
                 <tr>
                     <td>JLPT Level</td>
                     <td>{{ form_data['jlpt_level'] }}</td>
                 </tr>
+                
                 <tr>
                     <td>Test Center</td>
                     <td>{{ form_data['test_center'] }}</td>
                     <input type="hidden" name="{{ key }}" value="{{ value }}">
                 </tr>
+                
                 <tr>
                     <td> Full Name</td>
                     <td>{{ form_data['full_name'] }}</td>
+                </tr>
+                
+                <tr>
+                    <td> Gender</td>
+                    <td> {{ form_data['gender'] }}</td>  
+                </tr>
+
+                <tr>
+                    <td> Date of Birth</td>
+                    <td> {{ form_data['dob_year'] }}-{{ form_data['dob_month'] }}-{{ form_data['dob_day'] }}</td>
+                </tr>
+                
+                <tr>
+                    <td>8 Digit Pascode</td>
+                    <td> {{ form_data['pass_code']}} </td>
+                </tr>
+
+                <tr>
+                    <td>Native Language.</td>
+                    <td> {{ form_data['native_language'] }}</td>
+                </tr>
+
+                <tr>
+                    <td>Nationality.</td>
+                    <td> {{ form_data['nationality'] }}</td>
+                </tr>
+
+                <tr>
+                    <td>Address</td>
+                    <td> {{ form_data['adress'] }}</td>
+                </tr>
+
+                <tr>
+                    <td>Country</td>
+                    <td> {{form_data['country']}} </td>
+                </tr>
+
+                <tr>
+                    <td>ZIP Code</td>
+                    <td>{{form_data['zip_code']}}</td>
+                </tr>
+
+                <tr>
+                    <td>Phone Number</td>
+                    <td>{{form_data['phone_number']}}</td>
+                </tr>
+
+                <tr>
+                    <td>Email</td>
+                    <td>{{form_data['email']}}</td>
                 </tr>
             </table>
             <div class="button-container">

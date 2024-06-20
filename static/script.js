@@ -29,12 +29,14 @@ let currentStep = 0;
                     }
                 } else if (currentStep === 1) { // Step 2: Personal Information
                     const fullNameInput = activeStep.querySelector('#full_name');
+                    const fullName = fullNameInput.value;
                     const pattern = /^[A-Za-z\s]+$/;
-                    if (!pattern.test(fullNameInput.value)) {
+                    if (!pattern.test(fullNameInput.value) || fullName.length < 3) {
                         window.alert("Please enter a valid Given Name (letters and spaces only).");
                         return;
                     }
                 } else if (currentStep === 2) { // Date of birth, Pass Code
+
                     const dob_year = document.getElementById("dob_year").value;
                     const dob_month = document.getElementById("dob_month").value;
                     const dob_day = document.getElementById("dob_day").value;
@@ -52,6 +54,11 @@ let currentStep = 0;
                         window.alert("Please enter a valid 8-character pass code.");
                         return;
                     }
+                    const confirm_pass_code = document.getElementById("confim_code").value;
+                    if (pass_code !== confirm_pass_code) {
+                        window.alert("Please Confirm your 8-Character Pass code.");
+                        return;
+                    }
                 } else if (currentStep === 3) { // Step 3: Native Language and Nationality
                     const native_language = document.getElementById("native_language").value;
                     if (![701, 606, 408, 411, 430, 0].includes(parseInt(native_language))) {
@@ -64,9 +71,11 @@ let currentStep = 0;
                         window.alert("Please enter a valid nationality.");
                         return;
                     }
+
                 } else if (currentStep === 4) { // Step 4: Address Information
                     const addressInput = activeStep.querySelector('#adress');
-                    if (!addressInput.value) {
+                    const addressvalue = addressInput.value;
+                    if (!addressInput.value || addressvalue.length < 5) {
                         window.alert("Please enter a valid address.");
                         return;
                     }
@@ -93,12 +102,18 @@ let currentStep = 0;
                     }
         
                     const emailInput = activeStep.querySelector('#email');
+                    const confirmemailInput = activeStep.querySelector('#confirm_email');
                     if (!emailInput.checkValidity()) {
                         window.alert("Please enter a valid email address.");
                         return;
                     }
+                    if (emailInput.value !== confirmemailInput.value) {
+                        window.alert("Please confirm your email address.");
+                        return;
+                    }
                 } else if (currentStep === 6) { // Step 6: Institute
-                    if (!activeStep.querySelector("#institute").value) {
+                    const instituteInput = activeStep.querySelector('#institute').value;
+                    if (!activeStep.querySelector("#institute").value || instituteInput.length < 3) {
                         window.alert("Please enter a valid institute.");
                         return;
                     }
@@ -107,12 +122,10 @@ let currentStep = 0;
                         window.alert("Please select a reason for taking the exam.");
                         return;
                     }
-                } else if (currentStep === 8) { // Step 8: Occupation
                     if (!activeStep.querySelector('#occupation').value) {
                         window.alert("Please select an occupation.");
                         return;
                     }
-                } else if (currentStep === 9) { // Step 9: Occupation Details
                     if (!activeStep.querySelector('#occupation_details').value) {
                         window.alert("Please select occupation details.");
                         return;
